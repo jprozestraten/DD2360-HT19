@@ -144,6 +144,7 @@ void shared_sgemm_kernel(float *C, float *A, float *B, long size)
 			__syncthreads();
 	
 			/* TODO introduce a pragma directive that can potentially improve performance here */
+			#pragma unroll
 			for (long k = 0; k < TILE_SIZE; ++k) {
 				/* TODO Perform multiplication here */
 			}
