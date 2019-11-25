@@ -133,6 +133,8 @@ void shared_sgemm_kernel(float *C, float *A, float *B, long size)
 	float val = 0.0;
 
 	/* TODO declare shared memory with size TILE_SIZE x TILE_SIZE */
+	__shared__ float tile_A[TILE_SIZE][TILE_SIZE];
+	__shared__ float tile_B[TILE_SIZE][TILE_SIZE];
 
 	if (col < size && row < size) {
 		const long local_col = blockIdx.x * TILE_SIZE + threadIdx.x;
@@ -147,6 +149,7 @@ void shared_sgemm_kernel(float *C, float *A, float *B, long size)
 			#pragma unroll
 			for (long k = 0; k < TILE_SIZE; ++k) {
 				/* TODO Perform multiplication here */
+				val += tile_A[threadIdx.y][k] * tile_B[k][threadIdx.x];
 			}
 			__syncthreads();
 		}
@@ -154,6 +157,7 @@ void shared_sgemm_kernel(float *C, float *A, float *B, long size)
 		C[local_row * size + local_col] = val;
 	}
 }
+
 
 /* matmul with shared memory */
 void shared_sgemm(float *C, float *A, float *B, long size)
@@ -180,7 +184,7 @@ void cublas_sgemm(float *C, float *A, float *B, long size)
 
 	gettimeofday(&t0, NULL);
 	/* TODO fill in the blanks, do C = BA instead of C = AB */
-	cublasSgemm(handle, CUBLAS_OP_N, CUBLAS_OP_N, , , , , , , , , , , );
+	cublasSgemm(handle, CUBLAS_OP_N, CUBLAS_OP_N, size , size, size, &alpha, B, size, A, size, &beta, C, size);
 	checkCudaErrors(cudaDeviceSynchronize());
 	gettimeofday(&t1, NULL);
 	cublasDestroy(handle);
@@ -267,19 +271,22 @@ int main(int argc, char *argv[])
 	}
 	else {
 		checkCudaErrors(cudaMemcpy(C_truth, d_C, sizeof(float)*size*size, cudaMemcpyDeviceToHost));
-	}
+	} 
+
 
 	/* run naive gpu gemm */
 	checkCudaErrors(cudaMemset(d_C, 0, sizeof(float)*size*size));
 	naive_sgemm(d_C, d_A, d_B, size);
 	checkCudaErrors(cudaMemcpy(C_result, d_C, sizeof(float)*size*size, cudaMemcpyDeviceToHost));
-	compare_matrix(C_result, C_truth, size, THRESHOLD);
+	compare_matrix(C_result, C_truth, size, THRESHOLD);  
+
 
 	/* run shared */
 	checkCudaErrors(cudaMemset(d_C, 0, sizeof(float)*size*size));
 	shared_sgemm(d_C, d_A, d_B, size);
 	checkCudaErrors(cudaMemcpy(C_result, d_C, sizeof(float)*size*size, cudaMemcpyDeviceToHost));
 	compare_matrix(C_result, C_truth, size, THRESHOLD);
+
 
 	/* free */
 	checkCudaErrors(cudaFree(d_A));
