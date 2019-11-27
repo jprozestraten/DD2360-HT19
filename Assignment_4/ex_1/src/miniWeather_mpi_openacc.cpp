@@ -126,8 +126,8 @@ int main(int argc, char **argv) {
   sim_time = 1500;     //How many seconds to run the simulation
   output_freq = 10;   //How frequently to output data to file (in seconds)
   //Model setup: DATA_SPEC_THERMAL or DATA_SPEC_COLLISION
-  //data_spec_int = DATA_SPEC_INJECTION;
-  data_spec_int = DATA_SPEC_COLLISION;
+  data_spec_int = DATA_SPEC_INJECTION;
+  //data_spec_int = DATA_SPEC_COLLISION;
   ///////////////////////////////////////////////////////////////////////////////////////
   // END USER-CONFIGURABLE PARAMETERS
   ///////////////////////////////////////////////////////////////////////////////////////
