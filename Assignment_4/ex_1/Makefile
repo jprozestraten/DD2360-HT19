@@ -6,7 +6,7 @@ TARGET = miniWeahter
 
 LDFLAGS = -Wl,-rpath -Wl,/pdc/vol/openmpi/3.0/gcc/6.2.0/lib -Wl,--enable-new-dtags -L/pdc/vol/openmpi/3.0/gcc/6.2.0/lib -lmpi -lpthread -lm
 CFLAGS = -I./include -I/pdc/vol/openmpi/3.0/gcc/6.2.0/include -pg -O3
-OPENACC_FLAGS = -acc -ta=tesla:cc60,nvidia,lineinfo -Minfo=accel
+OPENACC_FLAGS = -acc -ta=tesla:cc30,nvidia,lineinfo -Minfo=accel
 
 all: dir $(BIN)/$(TARGET)
 
