@@ -2,7 +2,7 @@ CXX = pgc++
 SRC = $(wildcard src/*.cpp)
 OBJ = $(SRC:.cpp=.o)
 BIN = ./bin
-TARGET = miniWeahter
+TARGET = miniWeather
 
 LDFLAGS = -Wl,-rpath -Wl,/pdc/vol/openmpi/3.0/gcc/6.2.0/lib -Wl,--enable-new-dtags -L/pdc/vol/openmpi/3.0/gcc/6.2.0/lib -lmpi -lpthread -lm
 CFLAGS = -I./include -I/pdc/vol/openmpi/3.0/gcc/6.2.0/include -pg -O3
