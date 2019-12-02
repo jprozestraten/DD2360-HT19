@@ -106,8 +106,8 @@ int main(int argc, char** argv)
 
 	//particles_cpu = new Particle[NPARTICLES];
 	//particles_res = new Particle[NPARTICLES];
-	cudaMalloc((void **) &particles_cpu, NPARTICLES*sizeof(Particle), cudaHostAllocDefault);
-	cudaMalloc((void **) &particles_res, NPARTICLES*sizeof(Particle), cudaHostAllocDefault);
+	cudaHostAlloc((void **) &particles_cpu, NPARTICLES*sizeof(Particle), cudaHostAllocDefault);
+	cudaHostAlloc((void **) &particles_res, NPARTICLES*sizeof(Particle), cudaHostAllocDefault);
 
 	// Allocate device memory to store the output array
 	cudaMalloc(&particles_gpu, NPARTICLES*sizeof(Particle));
@@ -189,8 +189,8 @@ int main(int argc, char** argv)
 	//delete[] particles_cpu;
 	//delete[] particles_res;
 	cudaFree(particles_gpu);
-	cudaFree(particles_gpu);
-	cudaFree(particles_res); // Free the memory
+	cudaFreeHost(particles_gpu);
+	cudaFreeHost(particles_res); // Free the memory
 
 	return 0;
 }
