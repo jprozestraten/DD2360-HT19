@@ -181,7 +181,7 @@ int main(int argc, char** argv)
 	//delete[] particles_cpu;
 	//delete[] particles_res;
 	cudaFree(particles_gpu);
-	cudaFreeHost(particles_gpu);
+	cudaFreeHost(particles_cpu);
 	//cudaFreeHost(particles_res); // Free the memory
 
 	return 0;
